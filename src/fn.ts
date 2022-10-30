@@ -64,7 +64,7 @@ export interface FunctionParams {
  * generate code for a function as an array of strings.
  * @param params parameters
  */
-export default (params: FunctionParams): Array<string> => {
+export default (params: FunctionParams): string => {
     if (isBlank(params.name)) throw "function (name) should be a non-empty string.";
 
     const _decorators = Array.isArray(params.decorators)
@@ -143,5 +143,5 @@ export default (params: FunctionParams): Array<string> => {
         output.push(_header, _body);
     }
 
-    return output.filter((seg) => !isBlank(seg));
+    return output.filter((seg) => !isBlank(seg)).join(" ");
 };
