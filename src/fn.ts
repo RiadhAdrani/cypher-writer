@@ -1,4 +1,5 @@
 import { isBlank, wrap } from "@riadh-adrani/utility-js";
+import stmt from "./stmt";
 
 export interface FunctionParams {
     /**
@@ -88,7 +89,7 @@ export default (params: FunctionParams): Array<string> => {
         ? wrap(
               params.body
                   .filter((item) => !isBlank(item))
-                  .map((item) => item + ";")
+                  .map((item) => stmt(item))
                   .join(""),
               "{",
               "}"
