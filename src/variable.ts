@@ -8,7 +8,7 @@ import stmt from "./stmt";
  * @param value value
  * @param type type
  */
-export default (keyword: string, name: string, value?: string, type?: string) => {
+export default (keyword: string, name: string, value?: string, type?: string): string => {
     if (isBlank(keyword)) throw "variable (keyword) cannot be empty";
     if (isBlank(name)) throw "variable (name) cannot be empty";
 

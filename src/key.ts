@@ -8,7 +8,7 @@ import { isBlank } from "@riadh-adrani/utility-js";
  * @param name identifier
  * @param type key value or type. defaulted to `any`.
  */
-export default (name: string, type: string | Array<string>) => {
+export default (name: string, type: string | Array<string>): string => {
     if (isBlank(name)) {
         throw "key (name) should be a non-empty string.";
     }

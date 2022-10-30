@@ -6,6 +6,6 @@ import variable from "./variable";
  * @param value initial value
  * @param type type
  */
-export default (name: string, value?: string, type?: string) => {
+export default (name: string, value?: string, type?: string): string => {
     return variable("let", name, value, type);
 };
