@@ -1,3 +1,3 @@
 # Cypher Writer
 
-Utility function to write Javascript/Typescript code as strings.
+Utility functions to write Javascript/Typescript code as strings.
