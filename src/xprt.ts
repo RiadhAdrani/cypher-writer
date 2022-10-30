@@ -1,6 +1,11 @@
 import { isBlank, wrap } from "@riadh-adrani/utility-js";
 import stmt from "./stmt";
 
+/**
+ * @param objects items to be exported
+ * @param isDefault export as default object
+ * @param isCommonJs export using common.js syntax
+ */
 export default (
     objects: string | Array<string>,
     isDefault?: boolean,
