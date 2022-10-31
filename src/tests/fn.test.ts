@@ -10,12 +10,12 @@ describe("function", () => {
     );
 
     it.each([
-        [undefined, "function name  () : void {}"],
-        [null, "function name  () : void {}"],
-        [1, "function name  () : void {}"],
-        ["", "function name  () : void {}"],
-        [["@controller"], "@controller function name  () : void {}"],
-        [["@controller", undefined, "@module"], "@controller @module function name  () : void {}"],
+        [undefined, "function name () : void {};"],
+        [null, "function name () : void {};"],
+        [1, "function name () : void {};"],
+        ["", "function name () : void {};"],
+        [["@controller"], "@controller function name () : void {};"],
+        [["@controller", undefined, "@module"], "@controller @module function name () : void {};"],
     ])("should add decorators", (decorators, expected) => {
         expect(
             fn({
@@ -27,20 +27,20 @@ describe("function", () => {
     });
 
     it("should trim function name", () => {
-        expect(fn({ name: " name " })).toStrictEqual("function name () {}");
+        expect(fn({ name: " name " })).toStrictEqual("function name () {};");
     });
 
     it("should add async keyword", () => {
-        expect(fn({ name: "name", async: true })).toStrictEqual("async function name () {}");
+        expect(fn({ name: "name", async: true })).toStrictEqual("async function name () {};");
     });
 
     it.each([
-        [undefined, "function name  () : void {}"],
-        [null, "function name  () : void {}"],
-        [1, "function name  () : void {}"],
-        ["", "function name  () : void {}"],
-        [["T"], "function name <T> () : void {}"],
-        [["T", "K"], "function name <T,K> () : void {}"],
+        [undefined, "function name () : void {};"],
+        [null, "function name () : void {};"],
+        [1, "function name () : void {};"],
+        ["", "function name () : void {};"],
+        [["T"], "function name <T> () : void {};"],
+        [["T", "K"], "function name <T,K> () : void {};"],
     ])("should add decorators", (typeParameters, expected) => {
         expect(
             fn({
@@ -52,11 +52,11 @@ describe("function", () => {
     });
 
     it.each([
-        [undefined, "function name () {}"],
-        [null, "function name () {}"],
-        [1, "function name () {}"],
-        ["", "function name () {}"],
-        [["n", "m"], "function name (n,m) {}"],
+        [undefined, "function name () {};"],
+        [null, "function name () {};"],
+        [1, "function name () {};"],
+        ["", "function name () {};"],
+        [["n", "m"], "function name (n,m) {};"],
     ])("should add parameters", (parameters, expected) => {
         expect(
             fn({
@@ -67,14 +67,17 @@ describe("function", () => {
     });
 
     it.each([
-        [undefined, "function name () {}"],
-        [null, "function name () {}"],
-        [1, "function name () {}"],
-        ["", "function name () {}"],
-        [["const x = 10", "const y = x + 20"], "function name () {const x = 10;const y = x + 20;}"],
+        [undefined, "function name () {};"],
+        [null, "function name () {};"],
+        [1, "function name () {};"],
+        ["", "function name () {};"],
+        [
+            ["const x = 10", "const y = x + 20"],
+            "function name () {const x = 10;const y = x + 20;};",
+        ],
         [
             ["const x = 10", undefined, "const y = x + 20"],
-            "function name () {const x = 10;const y = x + 20;}",
+            "function name () {const x = 10;const y = x + 20;};",
         ],
     ])("should add body statements", (body, expected) => {
         expect(
@@ -86,14 +89,14 @@ describe("function", () => {
     });
 
     it.each([
-        [undefined, "function name  () : void {}"],
-        [null, "function name  () : void {}"],
-        [1, "function name  () : void {}"],
-        ["", "function name  () : void {}"],
-        [[], "function name  () : void {}"],
-        ["T", "function name  () : T {}"],
-        ["Array<string>", "function name  () : Array<string> {}"],
-        ["[string,number]", "function name  () : [string,number] {}"],
+        [undefined, "function name () : void {};"],
+        [null, "function name () : void {};"],
+        [1, "function name () : void {};"],
+        ["", "function name () : void {};"],
+        [[], "function name () : void {};"],
+        ["T", "function name () : T {};"],
+        ["Array<string>", "function name () : Array<string> {};"],
+        ["[string,number]", "function name () : [string,number] {};"],
     ])("should add return type", (returnType, expected) => {
         expect(
             fn({
@@ -113,7 +116,7 @@ describe("function", () => {
                 parameters: ["number1", "number2"],
                 body: ["return number1 + number2"],
             })
-        ).toStrictEqual("const name = async (number1,number2) => {return number1 + number2;}");
+        ).toStrictEqual("const name = async (number1,number2) => {return number1 + number2;};");
     });
 
     it("should render as a typescript arrow function", () => {
@@ -129,7 +132,7 @@ describe("function", () => {
                 body: ["return number1 + number2"],
             })
         ).toStrictEqual(
-            "const name = async <T,K,M> (number1 : K,number2 : M) : T => {return number1 + number2;}"
+            "const name = async <T,K,M> (number1 : K,number2 : M) : T => {return number1 + number2;};"
         );
     });
 
@@ -146,7 +149,7 @@ describe("function", () => {
                 returnType: "T",
                 body: ["return number1 + number2"],
             })
-        ).toStrictEqual("const name = async <T,K,M> (number1 : K,number2 : M) : T");
+        ).toStrictEqual("const name = async <T,K,M> (number1 : K,number2 : M) : T;");
     });
 
     it("should render an abstract function", () => {
@@ -161,6 +164,6 @@ describe("function", () => {
                 returnType: "T",
                 body: ["return number1 + number2"],
             })
-        ).toStrictEqual("abstract async name <T,K,M> (number1 : K,number2 : M) : T");
+        ).toStrictEqual("abstract async name <T,K,M> (number1 : K,number2 : M) : T;");
     });
 });

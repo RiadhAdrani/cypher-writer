@@ -35,7 +35,7 @@ export interface FunctionParams {
     /**
      * function name.
      */
-    name: string;
+    name?: string;
     /**
      * type parameters.
      * ```
@@ -58,6 +58,10 @@ export interface FunctionParams {
      * only available in Typescript or Declaration mode.
      */
     returnType?: string;
+    /**
+     * create a callback instead.
+     */
+    isCallback?: boolean;
 }
 
 /**
@@ -65,13 +69,14 @@ export interface FunctionParams {
  * @param params parameters
  */
 export default (params: FunctionParams): string => {
-    if (isBlank(params.name)) throw "function (name) should be a non-empty string.";
+    if (isBlank(params.name as string) && !params.isCallback)
+        throw "function (name) should be a non-empty string.";
 
     const _decorators = Array.isArray(params.decorators)
         ? params.decorators.filter((item) => !isBlank(item)).join(" ")
         : "";
 
-    const _name = params.name.trim();
+    const _name = (params.name as string).trim();
 
     if (_name.includes(" ")) throw "function (name) cannot contain white spaces.";
 
@@ -102,46 +107,53 @@ export default (params: FunctionParams): string => {
     const isTypescript = params.isTypescript === true;
     const isArrowFunction = params.isArrowFunction === true;
     const isAbstract = params.isAbstract === true;
+    const isCallback = params.isCallback === true;
 
-    const output = [];
+    const output: Array<string> = [];
 
-    if (isAbstract) {
-        const _header = ["abstract", _async, _name, _typeParameters, _parameters, ":", _returnType]
-            .join(" ")
-            .trim();
-
-        output.push(_header);
-    } else if (isTypescript || isDeclaration) {
-        let _header = (
-            isArrowFunction || isAbstract
-                ? ["const", _name, "=", _async, _typeParameters, _parameters, ":", _returnType]
-                : [_async, "function", _name, _typeParameters, _parameters, ":", _returnType]
-        )
-            .join(" ")
-            .trim();
-
-        if (!isBlank(_decorators)) output.push(_decorators);
-
-        if (isArrowFunction && !isDeclaration) {
-            _header += " =>";
-        }
-
-        output.push(_header);
-
-        if (!isDeclaration && !isAbstract) {
-            output.push(_body);
-        }
-    } else {
-        const _header = (
-            isArrowFunction
-                ? ["const", _name, "=", _async, _parameters, "=>"]
-                : [_async, "function", _name, _parameters]
-        )
-            .join(" ")
-            .trim();
-
-        output.push(_header, _body);
+    if (!isBlank(_decorators)) {
+        output.push(_decorators);
     }
 
-    return output.filter((seg) => !isBlank(seg)).join(" ");
+    if (isArrowFunction) {
+        output.push("const", _name, "=");
+    }
+
+    if (isAbstract) {
+        output.push("abstract");
+    }
+
+    if (params.async) {
+        output.push("async");
+    }
+
+    if (!isArrowFunction && !isAbstract) {
+        output.push("function");
+    }
+
+    if (!isArrowFunction) {
+        output.push(_name);
+    }
+
+    if (!isBlank(_typeParameters)) {
+        output.push(_typeParameters);
+    }
+
+    if (!isBlank(_parameters)) {
+        output.push(_parameters);
+    }
+
+    if ((isDeclaration || isTypescript) && !isBlank(_returnType)) {
+        output.push(":", _returnType);
+    }
+
+    if (isArrowFunction && !isDeclaration && !isAbstract) {
+        output.push("=>");
+    }
+
+    if (!isDeclaration && !isAbstract) {
+        output.push(_body);
+    }
+
+    return stmt(output.filter((seg) => !isBlank(seg)).join(" "));
 };
