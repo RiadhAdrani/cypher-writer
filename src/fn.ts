@@ -80,8 +80,6 @@ export default (params: FunctionParams): string => {
 
     if (_name.includes(" ")) throw "function (name) cannot contain white spaces.";
 
-    const _async = params.async === true ? "async" : "";
-
     const _typeParameters = Array.isArray(params.typeParameters)
         ? wrap(params.typeParameters.filter((item) => !isBlank(item)).join(","), "<", ">")
         : "";
@@ -107,7 +105,6 @@ export default (params: FunctionParams): string => {
     const isTypescript = params.isTypescript === true;
     const isArrowFunction = params.isArrowFunction === true;
     const isAbstract = params.isAbstract === true;
-    const isCallback = params.isCallback === true;
 
     const output: Array<string> = [];
 
