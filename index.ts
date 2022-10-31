@@ -9,5 +9,6 @@ export { default as key } from "./src/key";
 export { default as docs } from "./src/docs";
 export { default as obj } from "./src/obj";
 export { default as rray } from "./src/rray";
+export { default as str } from "./src/str";
 
 export { default as variable } from "./src/variable";
